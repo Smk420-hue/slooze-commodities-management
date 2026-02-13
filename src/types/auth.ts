@@ -1,9 +1,12 @@
 //src/types/auth.ts
 import { Role } from '@/lib/auth/roles';
 
+export type { Role };
+
 export interface User {
   id: string;
   email: string;
+  password?: string; // Optional since we don't want to send it to client
   name: string;
   role: Role;
   token?: string;
@@ -17,12 +20,12 @@ export interface LoginCredentials {
 }
 
 export interface AuthResponse {
-  user: User;
+  user: Omit<User, 'password'>;
   token: string;
 }
 
 export interface AuthSession {
-  user: User | null;
+  user: Omit<User, 'password'> | null;
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
