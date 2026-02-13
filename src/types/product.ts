@@ -1,5 +1,7 @@
 //src/types/product.ts
 
+export type ProductStatus = 'In Stock' | 'Low Stock' | 'Critical';
+
 export interface Product {
   id: string;
   name: string;
@@ -7,7 +9,7 @@ export interface Product {
   stock: number;
   price: number;
   unit: string;
-  status: 'In Stock' | 'Low Stock' | 'Critical';
+  status: ProductStatus;  // This must be the union type, not string
   description?: string;
   supplier: string;
   lastUpdated: string;
@@ -21,7 +23,7 @@ export interface ProductFormData {
   stock: number;
   price: number;
   unit: string;
-  status: 'In Stock' | 'Low Stock' | 'Critical';
+  status: ProductStatus;
   description?: string;
   supplier: string;
 }
