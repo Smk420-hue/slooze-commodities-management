@@ -1,21 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signToken } from '@/lib/auth/jwt';
+import { User, Role } from '@/types/auth';
 
-// Mock user database
-const mockUsers = [
+// Mock user database with proper typing
+const mockUsers: User[] = [
   {
     id: '1',
     email: 'manager@slooze.com',
     password: 'demo123',
     name: 'John Manager',
-    role: 'MANAGER',
+    role: 'MANAGER' as Role,
   },
   {
     id: '2',
     email: 'storekeeper@slooze.com',
     password: 'demo123',
     name: 'Jane StoreKeeper',
-    role: 'STORE_KEEPER',
+    role: 'STORE_KEEPER' as Role,
+  },
+  {
+    id: '3',
+    email: 'admin@slooze.com',
+    password: 'demo123',
+    name: 'Admin User',
+    role: 'MANAGER' as Role,
   },
 ];
 
@@ -44,6 +52,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Create user without password for response
     const { password: _, ...userWithoutPassword } = user;
     
     // Sign JWT token
@@ -77,7 +86,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET endpoint for session validation (simplified - client just checks cookie existence)
+// GET endpoint for session validation
 export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get('auth_token')?.value;
@@ -89,7 +98,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // We don't verify here - middleware does that
     // Just return success if cookie exists
     return NextResponse.json({ 
       valid: true,
