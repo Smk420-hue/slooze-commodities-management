@@ -1,14 +1,12 @@
 //src/lib/auth/auth.ts
 
 import { LoginCredentials, User, AuthResponse } from '@/types/auth';
-import { setSession, clearSession, getSession } from './session';
+import { useUserStore } from '@/store/user.store';
 
 // Mock login function
 export async function login(credentials: LoginCredentials): Promise<AuthResponse> {
-  // Simulate API call delay
   await new Promise(resolve => setTimeout(resolve, 500));
 
-  // Mock authentication
   const mockUsers: User[] = [
     {
       id: '1',
@@ -26,57 +24,25 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
 
   const user = mockUsers.find(u => u.email === credentials.email);
   
-  if (!user) {
-    throw new Error('Invalid credentials');
-  }
-
-  // Mock password check (in real app, this would be server-side)
-  const validPassword = credentials.password === 'demo123';
-  if (!validPassword) {
+  if (!user || credentials.password !== 'demo123') {
     throw new Error('Invalid credentials');
   }
 
   const token = `mock-jwt-token-${user.id}-${Date.now()}`;
-  const authResponse: AuthResponse = { user, token };
+  
+  // Use Zustand store
+  useUserStore.getState().login(user);
 
-  // Store session
-  setSession(user, token);
-
-  return authResponse;
+  return { user, token };
 }
 
 // Logout function
-export function logout(): void {
-  clearSession();
-}
-
-// Check authentication status
-export function checkAuth(): boolean {
-  const session = getSession();
-  return !!session.token && !!session.user;
+export async function logout(): Promise<void> {
+  await fetch('/api/mock/auth/logout', { method: 'POST' });
+  useUserStore.getState().logout();
 }
 
 // Get current user
 export function getCurrentUser(): User | null {
-  const session = getSession();
-  return session.user;
-}
-
-// Mock function to refresh token
-export async function refreshToken(): Promise<string> {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  const session = getSession();
-  
-  if (!session.token) {
-    throw new Error('No token to refresh');
-  }
-
-  const newToken = `mock-jwt-token-refreshed-${Date.now()}`;
-  return newToken;
-}
-
-// Mock function to validate token
-export async function validateToken(token: string): Promise<boolean> {
-  await new Promise(resolve => setTimeout(resolve, 200));
-  return token.startsWith('mock-jwt-token');
+  return useUserStore.getState().user;
 }
