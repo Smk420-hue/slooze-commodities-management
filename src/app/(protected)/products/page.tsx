@@ -1,4 +1,5 @@
 //src/app/(protected)/products/page.tsx
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -8,9 +9,10 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Search, Filter, Plus, Download } from 'lucide-react';
 import Link from 'next/link';
+import { Product } from '@/types/product';
 
-// Mock product data
-const mockProducts = [
+// Mock product data with proper typing
+const mockProducts: Product[] = [
   {
     id: '1',
     name: 'Premium Wheat',
@@ -105,8 +107,8 @@ const categories = ['All', 'Grains', 'Beverages', 'Sweeteners', 'Oilseeds', 'Oil
 const statuses = ['All', 'In Stock', 'Low Stock', 'Critical'];
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState(mockProducts);
-  const [filteredProducts, setFilteredProducts] = useState(mockProducts);
+  const [products] = useState<Product[]>(mockProducts);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(mockProducts);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedStatus, setSelectedStatus] = useState('All');
