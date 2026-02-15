@@ -8,14 +8,14 @@ const mockUsers: User[] = [
     id: '1',
     email: 'manager@slooze.com',
     password: 'demo123',
-    name: 'John Manager',
+    name: 'Shekhar Manager',
     role: 'MANAGER' as Role,
   },
   {
     id: '2',
     email: 'storekeeper@slooze.com',
     password: 'demo123',
-    name: 'Jane StoreKeeper',
+    name: 'Kamble StoreKeeper',
     role: 'STORE_KEEPER' as Role,
   },
   {
@@ -111,3 +111,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
